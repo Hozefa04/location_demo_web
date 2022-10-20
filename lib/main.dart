@@ -40,6 +40,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getLocation() async {
+    LocationPermission locationPermission =
+        await FlLocation.checkLocationPermission();
+
+    if (locationPermission == LocationPermission.deniedForever) {
+      await FlLocation.requestLocationPermission();
+    }
+
     location = await FlLocation.getLocation();
     isInitialized = true;
     setState(() {});
@@ -50,7 +57,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: isInitialized
           ? Center(
-            child: Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -73,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-          )
+            )
           : const Center(
               child: Text("Provide Location"),
             ),
