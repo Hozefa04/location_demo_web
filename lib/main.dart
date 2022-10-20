@@ -1,12 +1,18 @@
-import 'package:fl_location/fl_location.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const LocationDemo());
+  String? para1 = Uri.base.queryParameters["para1"];
+  String? para2 = Uri.base.queryParameters["para2"];
+  runApp(LocationDemo(
+    para1: para1,
+    para2: para2,
+  ));
 }
 
 class LocationDemo extends StatelessWidget {
-  const LocationDemo({super.key});
+  final String? para1;
+  final String? para2;
+  const LocationDemo({super.key, this.para1, this.para2});
 
   // This widget is the root of your application.
   @override
@@ -17,13 +23,18 @@ class LocationDemo extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: HomePage(
+        para1: para1,
+        para2: para2,
+      ),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, this.para1, this.para2});
+  final String? para1;
+  final String? para2;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -31,52 +42,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isInitialized = false;
-  late Location location;
 
   @override
   void initState() {
-    getLocation();
     super.initState();
-  }
-
-  Future<void> getLocation() async {
-    location = await FlLocation.getLocation();
-    isInitialized = true;
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isInitialized
-          ? Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    location.latitude.toString(),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 42,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 22),
-                  Text(
-                    location.longitude.toString(),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 42,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-          )
-          : const Center(
-              child: Text("Provide Location"),
-            ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(widget.para1 == null
+                ? "Parameter1 is null"
+                : "Parameter 1 = ${widget.para1!}"),
+            Text(widget.para2 == null
+                ? "Parameter2 is null"
+                : "Parameter 2 = ${widget.para2!}"),
+          ],
+        ),
+      ),
     );
   }
 }
