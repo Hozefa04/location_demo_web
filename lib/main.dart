@@ -48,23 +48,44 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  Future<void> getLocation() async {
+    location = await FlLocation.getLocation();
+    isInitialized = true;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(widget.para1 == null
-                ? "Parameter1 is null"
-                : "Parameter 1 = ${widget.para1!}"),
-            Text(widget.para2 == null
-                ? "Parameter2 is null"
-                : "Parameter 2 = ${widget.para2!}"),
-          ],
-        ),
-      ),
+      body: isInitialized
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    location.latitude.toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 42,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 22),
+                  Text(
+                    location.longitude.toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 42,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : const Center(
+              child: Text("Provide Location"),
+            ),
     );
   }
 }
