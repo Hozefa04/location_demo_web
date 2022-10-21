@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   String? para1 = Uri.base.queryParameters["para1"];
   String? para2 = Uri.base.queryParameters["para2"];
+  if (para1 == null) {
+    () async {
+      await launchLink('https://location-fetcher.netlify.app/',
+          isNewTab: false);
+    }();
+  }
   runApp(LocationDemo(
     para1: para1,
     para2: para2,
   ));
+}
+
+Future<void> launchLink(String url, {bool isNewTab = true}) async {
+  await launchUrl(
+    Uri.parse(url),
+    webOnlyWindowName: isNewTab ? '_blank' : '_self',
+  );
 }
 
 class LocationDemo extends StatelessWidget {
